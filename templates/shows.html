@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Film · Theater Dramus</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(180deg, #e4f4f4 0%, #edf9f9 25%, #f6fcfc 60%, #ffffff 100%);
+            color: #1a202c;
+            min-height: 100vh;
+        }
+
+        .logo-font {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+        }
+
+        .hero-banner-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 380px;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            filter: blur(12px);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col antialiased selection:bg-teal-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="w-full bg-transparent z-20">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <a href="/" class="logo-font text-3xl font-extrabold tracking-tight text-gray-900 flex items-center gap-1">
+                    Theater Dramus
+                </a>
+                <div class="flex items-center gap-1.5 bg-gray-300/40 hover:bg-gray-300/60 transition cursor-pointer text-gray-700 text-xs font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="text-gray-800">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
+                    </svg>
+                    <span class="uppercase tracking-wide">Chapel SDH Lippo Cikarang</span>
+                </div>
+            </div>
+
+            <nav class="flex items-center space-x-7 text-sm font-semibold text-gray-800">
+                <a href="/shows?id=1" class="flex items-center gap-1.5 text-teal-600 transition">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+                    </svg>
+                    Promo
+                </a>
+                {% if user %}
+                    <a href="/account" class="flex items-center gap-2 bg-white/90 hover:bg-white px-3.5 py-1.5 rounded-full border border-gray-200/80 shadow-sm transition">
+                        <div class="w-7 h-7 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold text-xs uppercase shadow-sm">
+                            {{ user.name[0] }}
+                        </div>
+                        <span class="font-bold text-xs text-gray-800">{{ user.name }}</span>
+                    </a>
+                {% else %}
+                    <a href="/login" class="hover:text-teal-600 transition">Login</a>
+                    <a href="/signup" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-5 py-2 rounded-full transition shadow-md shadow-teal-600/20">
+                        Buat akun
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <div id="hero-bg" class="hero-banner-bg"></div>
+
+    <main class="w-full max-w-4xl mx-auto px-6 pt-6 pb-20 relative z-10 space-y-8">
+
+        <!-- Breadcrumb Navigation -->
+        <nav class="text-xs font-semibold text-gray-500 flex items-center gap-2">
+            <a href="/" class="hover:text-teal-700 transition">Beranda</a>
+            <span>/</span>
+            <a href="/shows?id=1" class="hover:text-teal-700 transition">Film</a>
+            <span>/</span>
+            <span id="breadcrumb-title" class="text-gray-900 font-bold uppercase">Detail Film</span>
+        </nav>
+
+        <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Detail film</h1>
+
+        <!-- Film / Musical Detail Card -->
+        <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
+            <div class="w-44 sm:w-48 aspect-[27/38] rounded-2xl overflow-hidden shadow-xl border border-white/80 bg-gray-900 flex-shrink-0">
+                <img id="show-poster" src="" alt="Poster" class="w-full h-full object-cover">
+            </div>
+
+            <div class="flex-1 space-y-3 pt-1">
+                <div class="text-xs font-semibold text-teal-700">
+                    Tayang: <span id="show-release" class="text-teal-900 font-bold">November 06</span> | Jual: <span class="text-teal-900 font-bold">Oktober 30</span>
+                </div>
+
+                <h2 id="show-title" class="text-3xl font-extrabold text-gray-900 tracking-tight uppercase">
+                    SHOW TITLE
+                </h2>
+
+                <p id="show-genre" class="text-xs font-semibold text-gray-500">Drama, Musical</p>
+
+                <div class="flex items-center gap-3 pt-3">
+                    <button class="flex items-center gap-2 bg-gray-200/80 hover:bg-gray-300 text-gray-800 text-xs font-bold px-4 py-2 rounded-full transition">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        Lihat trailer
+                    </button>
+                    <span id="show-duration" class="text-xs font-semibold text-gray-500">1h 30m</span>
+                    <span id="show-rating" class="bg-yellow-400 text-gray-900 text-[10px] font-extrabold px-1.5 py-0.5 rounded">SU</span>
+                    <span id="show-format" class="bg-gray-200/80 text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded">2D</span>
+                </div>
+
+                <p id="show-desc" class="text-xs text-gray-600 leading-relaxed pt-2 max-w-xl">
+                    Deskripsi drama/musikal.
+                </p>
+            </div>
+        </div>
+
+        <!-- Schedule & Venue Section -->
+        <div class="bg-teal-50/50 rounded-3xl p-6 sm:p-8 shadow-sm border border-teal-100">
+            <div class="flex items-center gap-6 border-b border-gray-200/80 pb-3 text-sm font-bold">
+                <button class="text-teal-700 border-b-2 border-teal-700 pb-3 tracking-wide">Jadwal</button>
+                <button class="text-gray-400 hover:text-gray-600 pb-3 transition tracking-wide">Detail</button>
+            </div>
+
+            <!-- Single Date Badge -->
+            <div class="flex items-center gap-3 mt-5">
+                <button class="bg-teal-600 text-white px-5 py-2.5 rounded-2xl text-center shadow-md shadow-teal-600/20">
+                    <span class="text-[10px] block font-medium uppercase tracking-wider opacity-90">Hari Ini</span>
+                    <span class="text-base font-extrabold">06</span>
+                </button>
+            </div>
+
+            <!-- Single Location Badge -->
+            <div class="flex items-center gap-2 mt-6">
+                <span class="bg-teal-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow-sm">
+                    Cikarang
+                </span>
+            </div>
+
+            <!-- Single Theater Card with 1 Showtime Slot -->
+            <div class="mt-6 bg-white rounded-2xl p-5 border border-gray-200/80 shadow-sm space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                    <div>
+                        <h4 class="font-extrabold text-base text-gray-900 tracking-tight">CHAPEL SDH LIPPO CIKARANG</h4>
+                        <p class="text-xs text-gray-500 font-medium">Theater Dramus Grand Hall</p>
+                    </div>
+                    <button class="flex items-center gap-1.5 text-xs font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full transition">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="16" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                        </svg>
+                        Venue Info
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-between text-xs pt-1">
+                    <span class="font-extrabold text-gray-700">Reguler 2D</span>
+                    <span class="font-extrabold text-teal-700 text-sm">Rp50.000</span>
+                </div>
+
+                <!-- Schedule Time Button (Routes dynamically to BCA Checkout) -->
+                <div class="pt-1">
+                    <a id="checkout-btn" href="/checkout/1" class="inline-block bg-teal-600 hover:bg-teal-700 active:scale-95 text-white font-extrabold text-sm py-2.5 px-8 rounded-xl transition shadow-md shadow-teal-600/20">
+                        19:30
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const SHOWS_DATA = {
+            1: {
+                t: "Perahu Kertas",
+                genre: "Drama, Romance",
+                d: "A dramatic story celebrating love, choices, and destiny on the final night of a gas-lit city.",
+                img: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=700&q=80",
+                format: "2D",
+                rating: "D17",
+                duration: "1h 34m"
+            },
+            2: {
+                t: "Payung Fantasy",
+                genre: "Comedy, Musical",
+                d: "Shakespeare's beloved comedy reinvented with music set inside a bustling night market.",
+                img: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?auto=format&fit=crop&w=700&q=80",
+                format: "2D",
+                rating: "SU",
+                duration: "2h 01m"
+            },
+            3: {
+                t: "Ten Minutes to Curtain",
+                genre: "Comedy, Stage Play",
+                d: "A hilarious backstage farce where everything that can go wrong before opening night does.",
+                img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=700&q=80",
+                format: "2D",
+                rating: "R13+",
+                duration: "1h 30m"
+            },
+            4: {
+                t: "Salt & Violin",
+                genre: "Chamber Musical, Drama",
+                d: "A soulful new chamber musical following the journey of two sisters separated at sea.",
+                img: "https://images.unsplash.com/photo-1469488865564-c2de10f69f96?auto=format&fit=crop&w=700&q=80",
+                format: "IMAX 2D",
+                rating: "D17",
+                duration: "1h 45m"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id') || '1';
+            const show = SHOWS_DATA[id] || SHOWS_DATA[1];
+
+            document.getElementById('breadcrumb-title').textContent = show.t;
+            document.getElementById('show-title').textContent = show.t;
+            document.getElementById('show-genre').textContent = show.genre;
+            document.getElementById('show-desc').textContent = show.d;
+            document.getElementById('show-poster').src = show.img;
+            document.getElementById('hero-bg').style.backgroundImage = `url('${show.img}')`;
+            document.getElementById('show-duration').textContent = show.duration;
+            document.getElementById('show-rating').textContent = show.rating;
+            document.getElementById('show-format').textContent = show.format;
+
+            // Dynamically update the checkout button link to match current show ID
+            document.getElementById('checkout-btn').href = `/checkout/${id}`;
+        });
+    </script>
+</body>
+</html>

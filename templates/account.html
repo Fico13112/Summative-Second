@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account & Tickets · Theater Dramus</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(180deg, #e4f4f4 0%, #edf9f9 25%, #f6fcfc 60%, #ffffff 100%);
+            color: #1a202c;
+            min-height: 100vh;
+        }
+
+        .logo-font {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col antialiased selection:bg-teal-500 selection:text-white">
+
+    <!-- Header Navigation with Log Out -->
+    <header class="w-full bg-white/80 backdrop-blur-md border-b border-gray-200/80 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="/" class="logo-font text-3xl font-extrabold tracking-tight text-gray-900 flex items-center gap-1">
+                Theater Dramus
+            </a>
+
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 bg-gray-100 px-3.5 py-1.5 rounded-full border border-gray-200">
+                    <div class="w-7 h-7 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold text-xs uppercase shadow-sm">
+                        {{ user.name[0] }}
+                    </div>
+                    <span class="font-bold text-xs text-gray-800">{{ user.name }}</span>
+                </div>
+
+                {% if user.is_admin %}
+                    <a href="/admin" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-4 py-2 rounded-full transition shadow-sm">
+                        Admin Dashboard
+                    </a>
+                {% endif %}
+
+                <!-- Working Log Out Link -->
+                <a href="/logout" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold px-4 py-2 rounded-full transition">
+                    Log Out
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="w-full max-w-4xl mx-auto px-6 py-10 flex-1 space-y-8">
+        
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Selamat Datang, {{ user.name }}</h1>
+                <p class="text-xs font-medium text-gray-500 mt-1">Email: {{ user.email }}</p>
+            </div>
+            <a href="/shows?id=1" class="bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-5 py-2.5 rounded-full transition shadow-md shadow-teal-600/20">
+                + Pesan Tiket Baru
+            </a>
+        </div>
+
+        <h2 class="text-xl font-extrabold text-gray-900 border-b border-gray-200 pb-3">Tiket Saya</h2>
+
+        <!-- Bookings List -->
+        {% if bookings %}
+            <div class="space-y-4">
+                {% for b in bookings %}
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-200/80 flex flex-col sm:flex-row items-center justify-between gap-6 transition hover:shadow-md">
+                    
+                    <div class="space-y-2 text-center sm:text-left flex-1">
+                        <div class="flex items-center justify-center sm:justify-start gap-2">
+                            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider {{ 'bg-green-100 text-green-800 border border-green-200' if b.status == 'approved' else 'bg-amber-100 text-amber-800 border border-amber-200' }}">
+                                {{ 'DISETUJUI (TIKET AKTIF)' if b.status == 'approved' else 'MENUNGGU VERIFIKASI BCA' }}
+                            </span>
+                        </div>
+
+                        <h3 class="font-extrabold text-xl text-gray-900 uppercase tracking-tight">{{ b.show_title }}</h3>
+                        
+                        <p class="text-xs font-semibold text-gray-500">
+                            📍 Chapel SDH Lippo Cikarang  |  ⏰ {{ b.show_time }}
+                        </p>
+
+                        <p class="text-xs font-bold text-teal-700 pt-1">
+                            Total Bayar: Rp{{ "{:,}".format(b.amount) }} (BCA Transfer)
+                        </p>
+                    </div>
+
+                    <!-- Dynamic QR Code & Ticket Code Display -->
+                    {% if b.status == 'approved' %}
+                        <div class="flex flex-col items-center bg-teal-50/50 p-4 rounded-2xl border border-teal-100 flex-shrink-0">
+                            <img src="/qrcode/{{ b.ticket_code }}" alt="QR Code" class="w-32 h-32 rounded-lg bg-white p-1 border border-teal-200">
+                            <span class="font-mono text-xs font-extrabold text-teal-900 mt-2 tracking-widest">{{ b.ticket_code }}</span>
+                            <span class="text-[10px] text-teal-600 font-semibold mt-0.5">Tunjukkan QR saat masuk</span>
+                        </div>
+                    {% else %}
+                        <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200 text-center flex-shrink-0 w-full sm:w-48 space-y-1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mx-auto text-amber-500 animate-pulse">
+                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <p class="text-xs font-bold text-gray-700">Bukti Terkirim</p>
+                            <p class="text-[10px] text-gray-500 leading-tight">Admin sedang mengecek transfer BCA kamu. QR Code akan muncul setelah disetujui.</p>
+                        </div>
+                    {% endif %}
+
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-white rounded-3xl p-10 text-center space-y-4 border border-gray-200/80 shadow-sm">
+                <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto text-teal-700 text-2xl">
+                    🎟️
+                </div>
+                <h3 class="text-lg font-extrabold text-gray-900">Belum Ada Tiket</h3>
+                <p class="text-xs text-gray-500 max-w-sm mx-auto">Kamu belum melakukan pemesanan pertunjukan drama/musikal. Silakan pilih pertunjukan dan lakukan pembayaran.</p>
+                <div>
+                    <a href="/shows?id=1" class="inline-block bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs px-6 py-3 rounded-full transition shadow-md shadow-teal-600/20">
+                        Lihat Jadwal Pertunjukan
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+    </main>
+
+</body>
+</html>
